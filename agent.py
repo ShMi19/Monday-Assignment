@@ -39,7 +39,7 @@ from config import (
     MODEL_CONVERSATIONAL, MODEL_FAST,
     MAX_CONTEXT_MESSAGES, MAX_TOOL_ROUNDS,
     CONFIDENCE_THRESHOLD, REQUIRED_FIELDS,
-    format_conversation, parse_json,
+    format_conversation, parse_json, safe_response_text,
 )
 
 
@@ -101,7 +101,7 @@ def _call_llm(messages: list[dict], model: str, temperature: float = 0.2) -> str
     clean = _trim_context(messages, use_summarization=False)
     try:
         resp = create_completion(model=model, messages=clean, temperature=temperature)
-        return resp.choices[0].message.content
+        return safe_response_text(resp)
     except Exception:
         return None
 

@@ -23,6 +23,26 @@ REQUIRED_FIELDS = ["industry", "company_size", "team", "use_case"]
 
 PLAN_NAMES = {"starter": "Starter", "standard": "Standard", "pro": "Pro"}
 
+# Single source of truth for all plan data — imported by tools.py, stripe_mock.py, app.py, security.py
+PLAN_PRICING = {
+    "Starter":  {"price": 9,  "min_seats": 1, "max_seats": 10,   "billing": "monthly",
+                 "features": ["Basic boards", "200+ templates", "Unlimited docs", "8 column types"]},
+    "Standard": {"price": 12, "min_seats": 3, "max_seats": 50,   "billing": "monthly",
+                 "features": ["Timeline & Gantt views", "250 automations/month", "250 integrations/month", "Guest access"]},
+    "Pro":      {"price": 19, "min_seats": 3, "max_seats": 9999, "billing": "monthly",
+                 "features": ["Private boards", "Chart view", "Time tracking", "Formula column", "25K automations/month"]},
+}
+
+
+def plan_for_seats(seats: int) -> str:
+    """Return the cheapest plan that fits a given seat count."""
+    if seats <= 10:
+        return "Starter"
+    if seats <= 50:
+        return "Standard"
+    return "Pro"
+
+
 CACHE_KEYS = ("cached_board", "cached_email", "cached_eval", "cached_improvements", "_email_cache_key")
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -55,6 +75,16 @@ def find_json_block(text: str) -> str | None:
     end = text.rfind("}")
     if start != -1 and end > start:
         return text[start : end + 1].strip()
+    return None
+
+
+def safe_response_text(resp) -> str | None:
+    """Safely extract text content from an LLM response, handling empty choices."""
+    try:
+        if resp and getattr(resp, "choices", None) and len(resp.choices) > 0:
+            return resp.choices[0].message.content
+    except (IndexError, AttributeError):
+        pass
     return None
 
 

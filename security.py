@@ -163,11 +163,24 @@ class RateLimiter:
 # 5. Tool Argument Validation
 # ═══════════════════════════════════════════════════════════════════════════
 
-VALID_PLANS = {"starter", "standard", "pro"}
-VALID_COMPETITORS = {
-    "jira", "asana", "trello", "clickup", "notion", "smartsheet",
-    "excel_sheets", "excel", "google sheets", "sheets", "spreadsheets", "spreadsheet",
-}
+from config import PLAN_NAMES
+
+VALID_PLANS = set(PLAN_NAMES.keys())
+
+# Built from competitive_intel.json keys + known aliases
+def _build_valid_competitors() -> set:
+    try:
+        import json, os
+        path = os.path.join(os.path.dirname(__file__), "competitive_intel.json")
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        keys = set(data.get("competitors", {}).keys())
+        aliases = {"excel", "google sheets", "sheets", "spreadsheets", "spreadsheet"}
+        return keys | aliases
+    except Exception:
+        return {"jira", "asana", "trello", "clickup", "notion", "smartsheet", "excel_sheets", "excel", "spreadsheets"}
+
+VALID_COMPETITORS = _build_valid_competitors()
 VALID_TEAMS = {"sales", "engineering", "marketing", "hr", "operations", "project management"}
 
 

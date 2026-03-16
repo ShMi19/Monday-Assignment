@@ -1,18 +1,14 @@
 import hashlib
 import time
 
-PRICING = {
-    "Starter": {"seat_price": 9, "billing": "monthly"},
-    "Standard": {"seat_price": 12, "billing": "monthly"},
-    "Pro": {"seat_price": 19, "billing": "monthly"},
-}
+from config import PLAN_PRICING
 
 
 def create_payment_link(plan: str, seats: int | None = None) -> dict:
     """Generate a mock Stripe-like checkout session based on plan and team size."""
-    tier = PRICING.get(plan, PRICING["Standard"])
+    tier = PLAN_PRICING.get(plan, PLAN_PRICING["Standard"])
     seat_count = seats or 3
-    seat_price = tier["seat_price"]
+    seat_price = tier["price"]
     subtotal = seat_price * seat_count
     billing = tier["billing"]
 

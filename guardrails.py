@@ -9,7 +9,7 @@ Uses the fast 8b model for low-latency safety checks:
 
 from prompts import INPUT_GUARD_PROMPT, OUTPUT_GUARD_PROMPT
 from groq_pool import create_completion
-from config import MODEL_FAST, parse_json
+from config import MODEL_FAST, parse_json, safe_response_text
 
 
 def _call_guard(system_prompt: str, user_content: str) -> dict | None:
@@ -20,7 +20,8 @@ def _call_guard(system_prompt: str, user_content: str) -> dict | None:
     ]
     try:
         resp = create_completion(model=MODEL_FAST, messages=messages, temperature=0.0)
-        return parse_json(resp.choices[0].message.content)
+        text = safe_response_text(resp)
+        return parse_json(text) if text else None
     except Exception:
         return None
 
@@ -103,6 +104,6 @@ def regenerate_safe_response(original_response: str, issue: str, messages: list[
     ]
     try:
         resp = create_completion(model=MODEL_FAST, messages=regen_messages, temperature=0.2)
-        return resp.choices[0].message.content
+        return safe_response_text(resp)
     except Exception:
         return None

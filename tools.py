@@ -8,6 +8,8 @@ The LLM sees these as function schemas and chooses when to invoke them.
 import json
 import os
 
+from config import PLAN_PRICING, plan_for_seats
+
 # ═══════════════════════════════════════════════════════════════════════════
 # Competitor Intelligence Knowledge Base — loaded from competitive_intel.json
 # ═══════════════════════════════════════════════════════════════════════════
@@ -25,14 +27,7 @@ _INTEL = _load_intel()
 COMPETITOR_DATA = _INTEL.get("competitors", {})
 MONDAY_INFO = _INTEL.get("monday_com", {})
 
-MONDAY_PRICING = {
-    "Starter": {"price": 9, "billing": "monthly", "min_seats": 1, "max_seats": 10,
-                "features": ["Basic boards", "200+ templates", "Unlimited docs", "8 column types"]},
-    "Standard": {"price": 12, "billing": "monthly", "min_seats": 3, "max_seats": 50,
-                 "features": ["Timeline & Gantt views", "250 automations/month", "250 integrations/month", "Guest access"]},
-    "Pro": {"price": 19, "billing": "monthly", "min_seats": 3, "max_seats": 999,
-            "features": ["Private boards", "Chart view", "Time tracking", "Formula column", "25K automations/month"]},
-}
+MONDAY_PRICING = PLAN_PRICING
 
 AUTOMATION_TEMPLATES = {
     "sales": [
@@ -223,7 +218,7 @@ def _exec_calculate_roi(args: dict) -> str:
     team_size = args.get("team_size", 10)
     tools_replaced = args.get("num_tools_replaced", 2)
 
-    best_plan = "Starter" if team_size <= 10 else ("Standard" if team_size <= 50 else "Pro")
+    best_plan = plan_for_seats(team_size)
     monday_per_seat = MONDAY_PRICING[best_plan]["price"]
     monday_total = monday_per_seat * team_size
 

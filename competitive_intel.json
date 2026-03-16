@@ -16,7 +16,7 @@
     "pricing": {
       "Starter": {"price_per_seat": 9, "max_seats": 10, "best_for": "Small teams getting started"},
       "Standard": {"price_per_seat": 12, "max_seats": 50, "best_for": "Growing teams needing automations and integrations"},
-      "Pro": {"price_per_seat": 19, "max_seats": null, "best_for": "Large teams needing advanced analytics and time tracking"}
+      "Pro": {"price_per_seat": 19, "max_seats": 9999, "best_for": "Large teams needing advanced analytics and time tracking"}
     }
   },
   "competitors": {

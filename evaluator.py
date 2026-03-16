@@ -13,7 +13,7 @@ from pathlib import Path
 
 from prompts import EVALUATOR_PROMPT, SELF_IMPROVE_PROMPT
 from groq_pool import create_completion
-from config import MODEL_EVALUATOR, MODEL_FAST, format_conversation, parse_json
+from config import MODEL_EVALUATOR, MODEL_FAST, format_conversation, parse_json, safe_response_text
 
 IMPROVEMENTS_FILE = Path(__file__).parent / ".learned_improvements.json"
 MAX_STORED_IMPROVEMENTS = 10
@@ -22,17 +22,20 @@ MAX_STORED_IMPROVEMENTS = 10
 def _call_and_parse(messages: list[dict], model: str, temp: float = 0.1) -> dict | None:
     try:
         resp = create_completion(model=model, messages=messages, temperature=temp)
-        raw = resp.choices[0].message.content
-        return parse_json(raw)
+        raw = safe_response_text(resp)
+        return parse_json(raw) if raw else None
     except Exception:
         return None
 
 
 def evaluate_conversation(messages: list[dict]) -> dict | None:
     """Score a completed sales conversation on 5 quality metrics."""
+    text = format_conversation(messages)
+    if not text.strip():
+        return None
     return _call_and_parse(
         [{"role": "system", "content": EVALUATOR_PROMPT},
-         {"role": "user", "content": format_conversation(messages)}],
+         {"role": "user", "content": text}],
         MODEL_EVALUATOR, 0.1,
     )
 

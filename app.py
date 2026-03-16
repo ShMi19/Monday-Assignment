@@ -16,7 +16,7 @@ import re
 import json
 from concurrent.futures import ThreadPoolExecutor
 import streamlit as st
-from config import REQUIRED_FIELDS, CONFIDENCE_THRESHOLD, PLAN_NAMES, CACHE_KEYS
+from config import REQUIRED_FIELDS, CONFIDENCE_THRESHOLD, PLAN_NAMES, CACHE_KEYS, PLAN_PRICING, plan_for_seats
 from agent import (
     conversation_stream_with_tools,
     extract_profile,
@@ -134,27 +134,12 @@ def _parse_company_size(raw: str) -> int | None:
         return (nums[0] + nums[1]) // 2
     return max(nums)
 
-_PLAN_SEAT_LIMITS = {
-    "Starter": (1, 10),
-    "Standard": (3, 50),
-    "Pro": (3, 9999),
-}
-
-
-def _plan_for_seats(seats: int) -> str:
-    """Return the cheapest plan that fits a given seat count."""
-    if seats <= 10:
-        return "Starter"
-    if seats <= 50:
-        return "Standard"
-    return "Pro"
-
-
 def _select_plan(company_size_raw: str, profile: dict = None) -> str:
     """Select plan based on user's explicit preference, falling back to company size.
 
     If the preferred plan can't support the seat count, auto-upgrade to the
     cheapest valid plan so we never display an impossible combination.
+    Uses PLAN_PRICING from config.py as single source of truth.
     """
     preferred_plan = None
     if profile:
@@ -169,15 +154,15 @@ def _select_plan(company_size_raw: str, profile: dict = None) -> str:
     seats = _select_seats(company_size_raw, profile)
 
     if preferred_plan:
-        _min, _max = _PLAN_SEAT_LIMITS.get(preferred_plan, (1, 9999))
-        if seats is not None and seats > _max:
-            return _plan_for_seats(seats)
+        max_seats = PLAN_PRICING.get(preferred_plan, {}).get("max_seats", 9999)
+        if seats is not None and seats > max_seats:
+            return plan_for_seats(seats)
         return preferred_plan
 
     size = _parse_company_size(company_size_raw)
     if size is None:
         return "Standard"
-    return _plan_for_seats(size)
+    return plan_for_seats(size)
 
 
 def _select_seats(company_size_raw: str, profile: dict = None) -> int | None:
@@ -362,7 +347,10 @@ def _render_checkout_view():
     plan = payment.get("plan", "Standard")
     seats = payment.get("seats", 3)
     details = PLAN_CHECKOUT_FEATURES.get(plan, PLAN_CHECKOUT_FEATURES["Standard"])
-    price_per_seat = int(payment.get("price_per_seat", "$12").replace("$", "").split("/")[0])
+    try:
+        price_per_seat = int(float(payment.get("price_per_seat", "$12").replace("$", "").split("/")[0]))
+    except (ValueError, TypeError):
+        price_per_seat = 12
     subtotal = price_per_seat * seats
     session_id = payment.get("session_id", "cs_demo_unknown")
 
