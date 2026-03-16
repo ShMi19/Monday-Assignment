@@ -1,0 +1,333 @@
+{
+  "last_updated": "2026-03",
+  "monday_com": {
+    "tagline": "Work OS — one platform for every team",
+    "core_strengths": [
+      "Single platform for engineering, sales, marketing, HR, ops — replaces 2-5 separate tools",
+      "200+ no-code automations built in, no plugins required",
+      "30+ column types — fully customizable to any workflow",
+      "Visual, intuitive UI — non-technical users adopt it in hours, not weeks",
+      "Multiple views: Kanban, Gantt, Timeline, Calendar, Workload, Chart, Map",
+      "Native integrations with 200+ tools (Slack, GitHub, Salesforce, HubSpot, etc.)",
+      "monday.com Docs — collaborative documents wired into workflows",
+      "Enterprise-grade security and reliability (SOC 2 Type II, HIPAA ready)",
+      "Scales from 3 to 5000+ users with consistent performance"
+    ],
+    "pricing": {
+      "Starter": {"price_per_seat": 9, "max_seats": 10, "best_for": "Small teams getting started"},
+      "Standard": {"price_per_seat": 12, "max_seats": 50, "best_for": "Growing teams needing automations and integrations"},
+      "Pro": {"price_per_seat": 19, "max_seats": null, "best_for": "Large teams needing advanced analytics and time tracking"}
+    }
+  },
+  "competitors": {
+    "jira": {
+      "name": "Jira",
+      "by": "Atlassian",
+      "category": "Engineering / Issue Tracking",
+      "typical_price": "$8.15/user/month (Premium)",
+      "who_uses_it": "Engineering and DevOps teams",
+      "strengths": [
+        "Deep engineering workflows (sprints, backlogs, epics)",
+        "Strong Agile/Scrum support with velocity tracking",
+        "Massive plugin marketplace (3000+ apps)",
+        "Advanced JQL query language for power users",
+        "Good CI/CD integration via Atlassian ecosystem"
+      ],
+      "weaknesses": [
+        "Engineering-only — sales, marketing, HR teams need completely separate tools",
+        "Steep learning curve — non-technical users struggle for weeks",
+        "No built-in CRM, content calendar, HR workflows, or forms",
+        "UI feels dated and cluttered compared to modern tools",
+        "Automations require plugins or Jira Automation (limited on lower tiers)",
+        "Dashboards are basic compared to monday.com's reporting",
+        "Cross-team collaboration requires additional Atlassian products (Confluence, Trello)"
+      ],
+      "why_prospects_consider_switching": [
+        "They need one tool for the whole company, not just engineering",
+        "Non-technical teams refuse to use Jira",
+        "Paying for Jira + Confluence + Trello adds up fast",
+        "Want simpler automations without writing JQL"
+      ],
+      "monday_win_strategy": {
+        "key_message": "Keep Jira for deep dev work if you love it — monday.com handles everything else AND integrates natively with Jira. Or replace it entirely with a tool everyone on your team will actually use.",
+        "killer_points": [
+          "monday.com has native Jira integration — sync issues bidirectionally without switching tools",
+          "One platform replaces Jira + Confluence + Trello = significant cost savings",
+          "Your marketing, sales, and ops teams can finally be on the same tool as engineering",
+          "200+ automations built in vs needing Jira plugins for basic workflows",
+          "Onboarding takes hours, not weeks — your non-technical team members will thank you"
+        ],
+        "objection_handlers": {
+          "We need Jira's advanced sprint features": "monday.com has sprint management, velocity tracking, and backlog views. For most teams it covers 90% of what Jira does — and the other 10% rarely justifies a separate tool for every other team.",
+          "We've been on Jira for years": "That's actually the best part — you can integrate them. Use monday.com for cross-team visibility while your engineers keep their Jira workflow. It's not all-or-nothing.",
+          "Jira is cheaper per seat": "Per seat, maybe. But you're also paying for Confluence, possibly Trello, and everyone's time learning a complex tool. monday.com replaces 2-3 tools at once."
+        }
+      }
+    },
+    "asana": {
+      "name": "Asana",
+      "by": "Asana Inc.",
+      "category": "Project Management",
+      "typical_price": "$10.99/user/month (Advanced)",
+      "who_uses_it": "Marketing, product, and cross-functional teams",
+      "strengths": [
+        "Clean, focused task management UI",
+        "Good for marketing teams and creative workflows",
+        "Decent portfolio/program management",
+        "Nice timeline (Gantt) view",
+        "Good integrations ecosystem"
+      ],
+      "weaknesses": [
+        "No built-in CRM or sales pipeline",
+        "Limited customization — fixed field types, not as flexible as monday.com's columns",
+        "No native time tracking",
+        "Dashboards and reporting are less powerful",
+        "Forms are basic compared to monday.com",
+        "No native docs or wiki feature",
+        "Gets expensive at scale — Advanced plan needed for most useful features"
+      ],
+      "why_prospects_consider_switching": [
+        "They've outgrown Asana's customization limits",
+        "They need CRM or sales tracking alongside project management",
+        "Reporting and dashboards aren't cutting it",
+        "They want time tracking without a third-party tool"
+      ],
+      "monday_win_strategy": {
+        "key_message": "If you like Asana's simplicity, you'll love monday.com — same clean feel but with way more flexibility and features your team will grow into.",
+        "killer_points": [
+          "30+ column types vs Asana's fixed fields — build exactly the workflow you need",
+          "Built-in CRM, time tracking, and chart views that Asana charges extra for or doesn't have",
+          "More powerful dashboards that pull data across multiple boards",
+          "monday.com Docs lets you write documentation connected directly to tasks",
+          "Better for cross-functional teams — not just project management"
+        ],
+        "objection_handlers": {
+          "Our team already knows Asana": "The transition is super smooth — monday.com has an Asana importer, and the UI is just as clean. Most teams are up and running in a day.",
+          "Asana works fine for us": "It probably does for now. The question is what happens when you need CRM, time tracking, or reporting across teams — that's when teams hit Asana's ceiling.",
+          "Asana is cheaper": "At the Advanced tier it's actually $10.99/seat — monday.com Standard at $12 gives you automations, integrations, AND time tracking that Asana charges separately for."
+        }
+      }
+    },
+    "trello": {
+      "name": "Trello",
+      "by": "Atlassian",
+      "category": "Kanban Boards",
+      "typical_price": "$5/user/month (Standard)",
+      "who_uses_it": "Small teams, freelancers, simple task tracking",
+      "strengths": [
+        "Dead-simple kanban interface",
+        "Very easy to learn — zero training needed",
+        "Generous free tier",
+        "Good for personal task management",
+        "Power-Ups extend basic functionality"
+      ],
+      "weaknesses": [
+        "Kanban only — no Gantt, timeline, workload, or chart views",
+        "Very limited automations (Butler is basic)",
+        "No real reporting or dashboards",
+        "Doesn't scale beyond small teams (10-15 people)",
+        "No built-in forms, docs, time tracking, or CRM",
+        "Power-Ups are limited per board on free/cheap tiers",
+        "No way to manage dependencies between tasks"
+      ],
+      "why_prospects_consider_switching": [
+        "Team has grown beyond 10 people and Trello can't keep up",
+        "Need more views than just kanban",
+        "Need real reporting and automations",
+        "Want everything in one place instead of Trello + spreadsheets + other tools"
+      ],
+      "monday_win_strategy": {
+        "key_message": "Trello is great for getting started, but once your team grows, you need something that grows with you. monday.com gives you that same ease-of-use plus everything Trello can't do.",
+        "killer_points": [
+          "Multiple views (Kanban + Gantt + Timeline + Calendar + Chart) — Trello only has kanban",
+          "200+ automations vs Trello's limited Butler",
+          "Real dashboards and reporting across boards",
+          "Scales from 5 to 5000+ users without hitting a wall",
+          "Trello → monday.com migration takes minutes with the built-in importer"
+        ],
+        "objection_handlers": {
+          "Trello is free": "Free for basic boards, yes. But once you need automations, reporting, or views beyond kanban, you're paying — and still getting less than monday.com Standard at $12/seat.",
+          "Our team loves Trello's simplicity": "monday.com's kanban view is just as simple — and you get timeline, Gantt, and chart views when you need them. You don't lose simplicity, you gain flexibility.",
+          "We don't need all those features": "You might not today. But when your team grows or your processes get more complex, you'll be glad you're on a platform that handles it — instead of migrating twice."
+        }
+      }
+    },
+    "clickup": {
+      "name": "ClickUp",
+      "by": "ClickUp Inc.",
+      "category": "Project Management",
+      "typical_price": "$7/user/month (Unlimited)",
+      "who_uses_it": "Startups, tech teams looking for an all-in-one tool",
+      "strengths": [
+        "Very feature-rich for the price",
+        "Aggressive pricing / good free tier",
+        "Docs, Whiteboards, and Goals built in",
+        "Tries to be an all-in-one workspace",
+        "Good for tech-savvy users"
+      ],
+      "weaknesses": [
+        "Overwhelming UI — too many features crammed into every screen",
+        "Known performance/speed issues with larger workspaces",
+        "Reliability concerns — more downtime incidents than competitors",
+        "Steep learning curve despite the feature set",
+        "Integrations are numerous but often shallow",
+        "Customer support is inconsistent",
+        "Less proven at enterprise scale"
+      ],
+      "why_prospects_consider_switching": [
+        "ClickUp is slow and buggy with their data volume",
+        "Team is overwhelmed by the UI complexity",
+        "Need something more reliable for enterprise use",
+        "Want better customer support and onboarding"
+      ],
+      "monday_win_strategy": {
+        "key_message": "ClickUp tries to do everything — monday.com actually does it well. Cleaner, faster, more reliable, and your team will actually use it.",
+        "killer_points": [
+          "monday.com is consistently rated higher for ease of use and UI design",
+          "Better performance at scale — no lag with large boards",
+          "Enterprise-grade reliability with 99.9% uptime SLA",
+          "200+ deeply-built integrations vs ClickUp's surface-level connectors",
+          "Dedicated customer success team for onboarding"
+        ],
+        "objection_handlers": {
+          "ClickUp is cheaper": "Per seat, slightly. But factor in the time your team wastes on a slow, confusing interface. The productivity gain from monday.com's cleaner UI pays for the difference in the first week.",
+          "ClickUp has more features": "More features doesn't mean better. monday.com has every feature most teams need — and they actually work reliably. With ClickUp, you get features but also bugs and slowdowns.",
+          "We already set up everything in ClickUp": "We can help migrate — and most teams tell us the cleanup alone was worth it. A tool your team actually enjoys using is worth the switch."
+        }
+      }
+    },
+    "notion": {
+      "name": "Notion",
+      "by": "Notion Labs",
+      "category": "Docs / Wiki / Databases",
+      "typical_price": "$8/user/month (Plus)",
+      "who_uses_it": "Knowledge workers, startups, documentation-heavy teams",
+      "strengths": [
+        "Excellent documentation and wiki capabilities",
+        "Flexible database system",
+        "Beautiful, clean interface for writing",
+        "Good for knowledge management and SOPs",
+        "Strong template gallery"
+      ],
+      "weaknesses": [
+        "Not a real project management tool — databases aren't workflows",
+        "No true automations or workflow engine",
+        "No Gantt charts, workload views, or resource management",
+        "Poor for managing sales pipelines, sprints, or complex processes",
+        "No native time tracking or forms",
+        "Performance degrades with large databases",
+        "No built-in communication or notification workflows"
+      ],
+      "why_prospects_consider_switching": [
+        "They realized Notion databases aren't real project management",
+        "Need automations to reduce manual work",
+        "Team needs more structure than free-form docs provide",
+        "Want pipeline/sprint management alongside documentation"
+      ],
+      "monday_win_strategy": {
+        "key_message": "Notion is amazing for docs and wikis. monday.com is built for getting work done. Use both — or use monday.com Docs to combine writing and workflows in one place.",
+        "killer_points": [
+          "monday.com is purpose-built for workflows — plan, track, execute, report",
+          "200+ automations vs Notion's zero native automations",
+          "Gantt charts, workload management, time tracking — none exist in Notion",
+          "monday.com Docs gives you collaborative writing connected directly to your workflows",
+          "Better for operational teams that need to execute, not just document"
+        ],
+        "objection_handlers": {
+          "We use Notion for everything": "That's actually a common pain point — teams try to bend Notion into a project management tool and end up with messy databases. monday.com handles the execution layer while Notion handles the knowledge layer. They integrate together.",
+          "Notion is more flexible": "Notion is flexible for documents and databases. monday.com is flexible for workflows. They solve different problems. But if you want one tool, monday.com Docs + boards gives you both.",
+          "Our whole wiki is in Notion": "Keep it! monday.com integrates with Notion. Use Notion for your wiki and monday.com for managing work. Best of both worlds."
+        }
+      }
+    },
+    "smartsheet": {
+      "name": "Smartsheet",
+      "by": "Smartsheet Inc.",
+      "category": "Spreadsheet-based Project Management",
+      "typical_price": "$9/user/month (Pro)",
+      "who_uses_it": "Ops teams, PMOs, enterprise project managers who love spreadsheets",
+      "strengths": [
+        "Familiar spreadsheet-like interface",
+        "Strong for PMO and portfolio management",
+        "Good Gantt and resource management",
+        "Enterprise security and compliance features",
+        "Decent automation capabilities"
+      ],
+      "weaknesses": [
+        "Feels like a glorified spreadsheet — not modern or visual",
+        "Steep learning curve for advanced features",
+        "UI is cluttered and not intuitive for non-power-users",
+        "Limited kanban and visual board options",
+        "Collaboration features feel bolted on",
+        "No built-in CRM, docs, or forms at the same level as monday.com",
+        "Expensive at enterprise tier"
+      ],
+      "why_prospects_consider_switching": [
+        "Team finds Smartsheet too complex and spreadsheet-heavy",
+        "Want a more visual, modern interface",
+        "Need better collaboration features",
+        "Looking to consolidate multiple tools"
+      ],
+      "monday_win_strategy": {
+        "key_message": "If your team likes the structure of spreadsheets but wants something people actually enjoy using, monday.com is the upgrade.",
+        "killer_points": [
+          "Table view gives you that spreadsheet feel — plus kanban, Gantt, timeline, and chart views",
+          "Way more intuitive — your team will adopt it without training",
+          "200+ automations built in vs Smartsheet's limited automation tiers",
+          "Better collaboration: @mentions, updates, file sharing, all in context",
+          "monday.com replaces Smartsheet + your docs tool + your forms tool"
+        ],
+        "objection_handlers": {
+          "We have complex formulas in Smartsheet": "monday.com has formula columns and integrates with Excel. For most teams, monday.com's built-in calculations cover it — and you get automations that replace many formulas entirely.",
+          "Smartsheet has better enterprise features": "monday.com is SOC 2 Type II certified, HIPAA-ready, with SSO, audit logs, and advanced permissions. Enterprise-grade security with a UI people actually like.",
+          "We've invested heavily in Smartsheet": "The migration is easier than you'd think — and the adoption rate goes way up. A tool people don't dread opening is worth the switch."
+        }
+      }
+    },
+    "excel_sheets": {
+      "name": "Excel / Google Sheets",
+      "by": "Microsoft / Google",
+      "category": "Spreadsheets",
+      "typical_price": "Included in Office 365 / Google Workspace",
+      "who_uses_it": "Everyone — the default before they get a real tool",
+      "strengths": [
+        "Everyone knows how to use them",
+        "Free or already included in existing subscriptions",
+        "Infinitely flexible (for better or worse)",
+        "Good for data analysis and one-off calculations"
+      ],
+      "weaknesses": [
+        "No real-time task tracking or status updates",
+        "No automations — everything is manual",
+        "Version control nightmare with multiple editors",
+        "No accountability — can't see who's doing what at a glance",
+        "No notifications, reminders, or workflow triggers",
+        "Breaks down completely beyond 10-15 people",
+        "No visual views — just rows and columns forever",
+        "Can't build dashboards or reports that update automatically"
+      ],
+      "why_prospects_consider_switching": [
+        "Spreadsheets have become unmanageable",
+        "Team has grown and needs real project management",
+        "Too many version control issues",
+        "Want automations to reduce manual updates"
+      ],
+      "monday_win_strategy": {
+        "key_message": "Spreadsheets got you this far — now it's time for something that works as hard as your team does. monday.com gives you that familiar grid layout plus automations, views, and dashboards that spreadsheets can never do.",
+        "killer_points": [
+          "Table view feels like a spreadsheet — so the transition is instant",
+          "But you also get kanban, Gantt, timeline, and dashboard views",
+          "Automations replace hours of manual updating — 'when status changes, notify the team'",
+          "Real-time collaboration with no version control issues",
+          "Import your existing spreadsheet directly into monday.com",
+          "Your team sees who's doing what at a glance — no more 'who owns this?'"
+        ],
+        "objection_handlers": {
+          "Spreadsheets are free": "They're free to use — but expensive in time. How many hours does your team spend updating statuses, chasing people for updates, and fixing broken formulas? monday.com automates all of that.",
+          "We're used to spreadsheets": "The table view will feel immediately familiar. You're not losing anything — you're gaining automations, dashboards, and views that spreadsheets can't do.",
+          "We don't need something fancy": "It's not about fancy — it's about your team knowing who's doing what without asking. That alone saves hours every week."
+        }
+      }
+    }
+  }
+}

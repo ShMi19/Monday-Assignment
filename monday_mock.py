@@ -1,3 +1,9 @@
+"""Mock monday.com board generation service.
+
+Attempts AI-generated board content first (via the 70b LLM), then falls
+back to generic templates if the LLM call fails.
+"""
+
 from agent import generate_board_with_llm
 
 _FALLBACK_COLUMNS = [
@@ -16,12 +22,9 @@ _FALLBACK_ITEMS = [
 
 
 def generate_monday_board(qualification: dict) -> dict:
-    """Generate a monday.com board tailored to the prospect's input.
-
-    Tries LLM-powered generation first, falls back to a generic template.
-    """
+    """Generate a monday.com board tailored to the prospect's input."""
     use_case = qualification.get("use_case") or "Customer Workflow"
-    team = qualification.get("team_using_monday") or "Team"
+    team = qualification.get("team") or qualification.get("team_using_monday") or "Team"
     industry = qualification.get("industry") or "Business"
 
     board_name = f"{team} – {use_case} ({industry})"

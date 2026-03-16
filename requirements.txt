@@ -1,6 +1,5 @@
-fastapi
-uvicorn
-openai
-pydantic
+streamlit
 groq
+openai
 python-dotenv
+pandas
