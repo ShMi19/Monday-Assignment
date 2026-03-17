@@ -2,6 +2,8 @@
 
 An autonomous AI sales agent that replaces the traditional 5-step GTM process — from first contact to payment — using a multi-agent LLM pipeline with agentic tool calling, real-time strategy planning, and defense-in-depth security.
 
+**Stack:** Python, Streamlit (UI), Groq (LLM inference — free tier), with Ollama local fallback.
+
 ## Quick Start
 
 ```bash
@@ -12,7 +14,7 @@ python -m streamlit run app.py
 
 Optional: provide multiple Groq keys for auto-rotation on rate limits: `GROQ_API_KEYS=key1,key2,key3`
 
-**For reviewers:** Click **"Auto Demo"** in the sidebar to watch the full 5-phase GTM flow run live in ~30 seconds — no typing needed. The real system executes on your machine: strategy planning, tool calls, streaming, extraction, scoring, board generation, payment, email, and self-improvement — all visible in real time.
+**For reviewers:** Instead of a Loom video, click **"Auto Demo"** in the sidebar to watch the full 5-phase GTM flow run live in ~30 seconds — no typing needed. It demonstrates all three example flows from the assignment: qualification conversation, auto-generated monday board, and payment link triggered by qualification. The real system executes on your machine with all agents, tool calls, and streaming visible in real time.
 
 ---
 
@@ -110,6 +112,7 @@ Each agent is separated for a specific reason — not just to add complexity:
 | **Live Coach** | 20b | Periodic quality monitor (every 3 turns); feeds tactical corrections like a sales manager |
 | **Conversation LLM** | 120b | Main agent — needs the largest model for tool-calling decisions and objection handling |
 | **Output Guardrail** | 20b | The conversation LLM can't reliably detect its own hallucinations |
+| **Auto-Regenerator** | 20b | When output guardrail flags a response, a separate LLM call rewrites it with corrections |
 | **Board Generator** | 120b | Generating realistic board structures (columns, items, workflows) is a distinct reasoning task |
 | **Email Generator** | 120b | Professional email writing has different tone and format requirements |
 | **Evaluator** | 120b | The model that ran the conversation shouldn't grade itself |
