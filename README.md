@@ -20,7 +20,7 @@ Optional: provide multiple Groq keys for auto-rotation on rate limits: `GROQ_API
 
 ## 1. Architecture
 
-Every user message passes through up to **8 LLM calls** (7 per turn + 1 periodic coach) plus 3 non-LLM security layers. Three of those LLM calls run **in parallel**.
+Every user message passes through up to **8 LLM calls** (7 per turn + 1 periodic coach) plus 3 non-LLM security layers. Three of those LLM calls run **in parallel** because they're independent of each other — this cuts ~2 seconds off every turn without sacrificing accuracy.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -35,20 +35,20 @@ Every user message passes through up to **8 LLM calls** (7 per turn + 1 periodic
               └──────────────┬───────────────┘
                              │
                     ┌────────▼────────┐
-                    │  Input Guardrail │  ← Context-aware: sees last 6 messages
-                    │  (20b)           │
+                    │  Input Guardrail│  ← Context-aware: sees last 6 messages
+                    │  (20b)          │
                     └───┬─────────┬───┘
               blocked   │         │ safe
                         │         │
      ╔══════════════════╧═════════╧══════════════════╗
-     ║     PARALLEL EXECUTION (ThreadPoolExecutor)    ║
-     ║                                                ║
+     ║     PARALLEL EXECUTION (ThreadPoolExecutor)   ║
+     ║                                               ║
      ║  ┌──────────────┐ ┌────────────┐ ┌──────────┐ ║
-     ║  │  Sentiment    │ │  Extractor │ │   Lead   │ ║
-     ║  │  Analyzer     │ │  (20b)     │ │  Scorer  │ ║
-     ║  │  (20b)        │ │  confidence│ │  (20b)   │ ║
-     ║  │  emotion +    │ │  -scored   │ │  0-100 + │ ║
-     ║  │  intensity    │ │  fields    │ │  signals │ ║
+     ║  │  Sentiment    │ │  Extractor │ │   Lead   │║
+     ║  │  Analyzer     │ │  (20b)     │ │  Scorer  │║
+     ║  │  (20b)        │ │  confidence│ │  (20b)   │║
+     ║  │  emotion +    │ │  -scored   │ │  0-100 + │║
+     ║  │  intensity    │ │  fields    │ │  signals │║
      ║  └──────┬───────┘ └─────┬──────┘ └────┬─────┘ ║
      ╚════════╤════════════════╤══════════════╤═══════╝
               └────────────────┼──────────────┘
@@ -98,7 +98,9 @@ Every user message passes through up to **8 LLM calls** (7 per turn + 1 periodic
                                    └────────────────────────────────┘
 ```
 
-### Why 14 Agents Instead of 1
+### Why a Multi-Agent Pipeline
+
+A single LLM that talks, extracts data, scores leads, checks safety, AND evaluates itself will do none of those well — each task needs its own temperature, output format, and reasoning style. Separating concerns lets each agent be optimized for its specific job, and lets three of them run in parallel.
 
 Each agent is separated for a specific reason — not just to add complexity:
 
@@ -119,7 +121,7 @@ Each agent is separated for a specific reason — not just to add complexity:
 | **Self-Improvement** | 20b | Converts evaluation results into reusable prompt improvements; persists to disk |
 | **Context Summarizer** | 20b | Compresses old messages instead of dropping them; runs only when context exceeds limits |
 
-**Model choice:** `openai/gpt-oss-120b` for quality-critical tasks (conversation, board gen, evaluation); `openai/gpt-oss-20b` for speed-critical tasks run in parallel. API key pool auto-rotates on rate limits with Ollama local fallback.
+**Model choice:** `openai/gpt-oss-120b` for quality-critical tasks (conversation, board gen, evaluation); `openai/gpt-oss-20b` for speed-critical tasks run in parallel. Both run on Groq's free tier. Since free-tier rate limits are strict, the system supports multiple API keys that auto-rotate on rate limits, with Ollama as a local fallback — ensuring the demo never breaks during a reviewer session.
 
 ---
 
@@ -132,10 +134,10 @@ Agent greets and asks about industry and team. The Extractor silently begins col
 Personalized demo based on extracted context. If the prospect mentions a competitor, the agent autonomously calls `compare_competitor` (backed by a knowledge base covering 7 competitors). If they ask about efficiency, it calls `suggest_automations`.
 
 ### Phase 3 — Qualification
-Agent naturally collects remaining details. Each field has a confidence score (0.0–1.0); low-confidence fields are prioritized. Lead score updates every turn.
+Agent naturally collects remaining details. Each field has a confidence score (0.0–1.0) rather than simple presence/absence — because a vague answer like "maybe tech?" is not the same certainty as "we're a fintech company." Low-confidence fields are prioritized in follow-up questions. Lead score updates every turn.
 
 ### Phase 4 — Use-Case Setup (Deferred Close)
-When all fields reach ≥0.7 confidence, a "Set up workspace" button appears. The agent does **not** auto-close — the prospect can keep chatting, object to pricing, compare tools, or negotiate. The agent handles objections with tool calls (ROI calculation, competitor comparison). Close happens only when the prospect explicitly opts in.
+When all fields reach ≥0.7 confidence, a "Set up workspace" button appears. The agent does **not** auto-close. Why: in real sales, the most valuable part of the conversation — objection handling, negotiation, competitor comparison — happens *after* qualification. Auto-closing would skip exactly the part that wins deals. The prospect can keep chatting, and the agent handles objections with tool calls (ROI calculation, competitor comparison). Close happens only when the prospect explicitly opts in.
 
 ### Phase 5 — Close & Payment
 When the prospect clicks the button, the system generates:
@@ -144,12 +146,12 @@ When the prospect clicks the button, the system generates:
 - Mock Stripe checkout page
 - Personalized follow-up email for their team
 - Conversation quality scorecard (5 metrics)
-- Self-improvement suggestions saved to disk for future sessions
+- Self-improvement suggestions saved to disk for future sessions — creating a flywheel where each conversation makes the next one better
 
 ### How Input, Decisions, and Transitions Work
 - **Input**: Every message passes through sanitization → regex injection filter → context-aware LLM guardrail before the pipeline sees it
 - **Decisions**: The Strategy Planner autonomously decides the approach (discover / educate / close / handle_objection). The Conversation LLM autonomously decides which tools to call. No hardcoded if/else chains.
-- **Transitions**: Phase progression is driven by field confidence scores, not hardcoded rules. The agent moves forward naturally as it learns more.
+- **Transitions**: Phase progression is driven by field confidence scores, not hardcoded rules — so the agent adapts to any conversation order. A prospect who volunteers everything in one message qualifies immediately; one who needs gentle probing gets guided naturally.
 
 ---
 
@@ -157,7 +159,7 @@ When the prospect clicks the button, the system generates:
 
 ### How the Conversation Prompt Works
 
-The main conversation prompt is **dynamically assembled** each turn. The same template produces completely different behavior depending on conversation state:
+The main conversation prompt is **dynamically assembled** each turn rather than being static. A static prompt can't adapt to the current prospect's emotional state, profile gaps, or negotiation stage — so instead, we build the system prompt fresh every turn by injecting real-time context:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -168,8 +170,8 @@ The main conversation prompt is **dynamically assembled** each turn. The same te
 │  [Pricing tiers + limits]   ← always present             │
 │                                                          │
 │  [Profile summary]          ← "Tech company, 50 people,  │
-│                                engineering team.          │
-│                                Missing: use case."        │
+│                                engineering team.         │
+│                                Missing: use case."       │
 │                                                          │
 │  [Sentiment]                ← "Prospect is skeptical     │
 │                                (intensity: 0.7)"         │
@@ -193,7 +195,7 @@ This means a skeptical prospect with pricing concerns gets a completely differen
 
 ### Agentic Tool Calling
 
-The Conversation LLM has 4 tools via Groq's native function calling API. It decides **autonomously** which to call and when. All tool calls are visible in the UI's "Agent Reasoning" panel.
+The Conversation LLM has 4 tools via Groq's native function calling API. It decides **autonomously** which to call and when — the code provides the tools, the LLM decides when to use them. This is the key difference between a chatbot and an agent: adding a new capability (e.g., a CRM lookup tool) requires only a JSON schema and a handler function — zero changes to conversation logic. All tool calls are visible in the UI's "Agent Reasoning" panel.
 
 | Tool | What it does | When the LLM calls it |
 |------|-------------|----------------------|
@@ -202,7 +204,7 @@ The Conversation LLM has 4 tools via Groq's native function calling API. It deci
 | `calculate_roi` | ROI analysis: current spend vs monday.com | Prospect mentions what they're paying |
 | `suggest_automations` | Team-specific automation recipes | Prospect asks about efficiency |
 
-The competitor knowledge base (`competitive_intel.json`) covers 7 competitors with strengths, weaknesses, win strategies, and specific objection handlers.
+The competitor knowledge base (`competitive_intel.json`) covers 7 competitors with strengths, weaknesses, win strategies, and specific objection handlers — giving the agent factual data to make arguments, rather than relying on the LLM's training data which may be outdated or vague.
 
 ### Branching
 
@@ -230,11 +232,13 @@ The Extractor LLM runs every turn, outputting JSON with per-field confidence sco
 }
 ```
 
-Fields below 0.7 trigger follow-up questions. Regex fallback catches plan/seat mentions the LLM may miss.
+Fields below 0.7 trigger follow-up questions. A regex fallback layer catches plan/seat mentions the LLM may miss — because LLM extraction can occasionally skip explicit user statements like "let's do Starter for 10 people," and a simple pattern match ensures those are never lost.
 
 ---
 
 ## 4. Security (Defense-in-Depth)
+
+No single security layer catches everything: regex catches known patterns but misses novel attacks; LLM guardrails understand intent but can be tricked; output sanitization catches XSS that neither would detect. Layering six independent checks means an attacker would have to bypass all of them.
 
 | Layer | What It Does |
 |-------|-------------|
